@@ -38,7 +38,7 @@ jobs:
     volumes:
       - ${{ volumes.project.ref_rw }}
     detach: True
-    life_span: 10d
+    life_span: 1d
     multi: true
     bash: |
         python ${{ volumes.project.mount }}/train.py
