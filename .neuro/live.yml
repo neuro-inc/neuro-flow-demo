@@ -3,6 +3,7 @@ title: Example config
 
 defaults:
   preset: cpu-small
+  life_span: 1d
   env:
     EXPOSE_SSH: "yes"
     PYTHONPATH: /project
@@ -11,6 +12,7 @@ defaults:
 volumes:
   project:
     remote: storage:${{ flow.id }}
+    local: .
     mount: /project
     read_only: False
 
@@ -67,6 +69,7 @@ jobs:
     http_port: 6006
     browse: True
     detach: True
+    life_span: 1d
     cmd: tensorboard --host=0.0.0.0 --logdir=${{ volumes.project.mount }}
 
   filebrowser:

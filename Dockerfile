@@ -2,15 +2,10 @@ FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel
 
 
 # Install system dependencies:
-RUN pip install --progress-bar=off -U --no-cache-dir \
-    nano \
-    vim
-
-# Cleanup system dependencies:
-RUN apt-get -qq clean \
-    && apt-get autoremove \
-    && rm -rf /var/lib/apt/lists/*
-
+RUN apt-get -qq update \
+    && apt-get install -y --no-install-recommends \
+        nano \
+        vim
 
 # Install pip dependencies:
 COPY requirements.txt /tmp/requirements.txt
