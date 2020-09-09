@@ -1,0 +1,4 @@
+[storage]
+cp-exclude = [".git"]
+cp-exclude-from-files = [".neuroignore", ".gitignore"]
+

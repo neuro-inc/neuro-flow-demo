@@ -1,0 +1,80 @@
+kind: live
+title: Example config
+
+defaults:
+  preset: cpu-small
+  env:
+    EXPOSE_SSH: "yes"
+    PYTHONPATH: /project
+
+
+volumes:
+  project:
+    remote: storage:${{ flow.id }}
+    mount: /project
+    read_only: False
+
+
+images:
+  myimage:
+    ref: image:${{ flow.id }}:v1.0
+    dockerfile: ${{ flow.workspace }}/Dockerfile
+    context: ${{ flow.workspace }}
+
+
+jobs:
+  develop:
+    image: ${{ images.myimage.ref }}
+    volumes:
+      - ${{ volumes.project.ref_rw }}
+    env:
+      EXPOSE_SSH: "yes"
+    port_forward:
+      - "2211:22"
+    cmd: bash
+
+  train:
+    image: ${{ images.myimage.ref }}
+    volumes:
+      - ${{ volumes.project.ref_rw }}
+    detach: True
+    life_span: 10d
+    multi: true
+    bash: |
+        python ${{ volumes.project.mount }}/train.py
+
+  jupyter:
+    image: ${{ images.myimage.ref }}
+    volumes:
+      - ${{ volumes.project.ref_rw }}
+    http_port: 8888
+    browse: True
+    detach: True
+    life_span: 1d
+    cmd: >-
+      jupyter notebook
+        --no-browser
+        --ip=0.0.0.0
+        --allow-root
+        --NotebookApp.token=
+        --notebook-dir=${{ volumes.project.mount }}
+
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    volumes:
+      - ${{ volumes.project.ref_rw }}
+    preset: cpu-small
+    http_port: 6006
+    browse: True
+    detach: True
+    cmd: tensorboard --host=0.0.0.0 --logdir=${{ volumes.project.mount }}
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    preset: cpu-small
+    volumes:
+      - ${{ volumes.project.remote }}:/srv:rw
+    http_port: 80
+    browse: True
+    detach: True
+    cmd: --noauth
