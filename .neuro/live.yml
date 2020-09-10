@@ -2,7 +2,8 @@ kind: live
 title: Example config
 
 defaults:
-  preset: cpu-small
+  preset: gpu-small
+  life_span: 1d
   env:
     EXPOSE_SSH: "yes"
     PYTHONPATH: /project
@@ -11,6 +12,7 @@ defaults:
 volumes:
   project:
     remote: storage:${{ flow.id }}
+    local: .
     mount: /project
     read_only: False
 
@@ -18,7 +20,7 @@ volumes:
 images:
   myimage:
     ref: image:${{ flow.id }}:v1.0
-    dockerfile: ${{ flow.workspace }}/Dockerfile
+    dockerfile: ${{ flow.workspace }}/.neuro/Dockerfile
     context: ${{ flow.workspace }}
 
 
@@ -38,7 +40,7 @@ jobs:
     volumes:
       - ${{ volumes.project.ref_rw }}
     detach: True
-    life_span: 10d
+    life_span: 1d
     multi: true
     bash: |
         python ${{ volumes.project.mount }}/train.py
@@ -59,6 +61,22 @@ jobs:
         --NotebookApp.token=
         --notebook-dir=${{ volumes.project.mount }}
 
+  jupyterlab:
+    image: ${{ images.myimage.ref }}
+    volumes:
+      - ${{ volumes.project.ref_rw }}
+    http_port: 8888
+    browse: True
+    detach: True
+    life_span: 1d
+    cmd: >-
+      jupyter lab
+        --no-browser
+        --ip=0.0.0.0
+        --allow-root
+        --NotebookApp.token=
+        --notebook-dir=${{ volumes.project.mount }}
+
   tensorboard:
     image: tensorflow/tensorflow:latest
     volumes:
@@ -67,6 +85,7 @@ jobs:
     http_port: 6006
     browse: True
     detach: True
+    life_span: 1d
     cmd: tensorboard --host=0.0.0.0 --logdir=${{ volumes.project.mount }}
 
   filebrowser:
