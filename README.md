@@ -23,8 +23,3 @@ neuro-flow run jupyter
 neuro-flow run develop
 neuro-flow ps
 ```
-
-
-TODO: do not scaffold this file (inside .neuro/
-TODO: pput your data to `.neuroignore` (`#/data/**/*` + comment) + warning
-TODO: print ls of files
