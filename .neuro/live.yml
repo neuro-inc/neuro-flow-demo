@@ -61,6 +61,22 @@ jobs:
         --NotebookApp.token=
         --notebook-dir=${{ volumes.project.mount }}
 
+  jupyterlab:
+    image: ${{ images.myimage.ref }}
+    volumes:
+      - ${{ volumes.project.ref_rw }}
+    http_port: 8888
+    browse: True
+    detach: True
+    life_span: 1d
+    cmd: >-
+      jupyter lab
+        --no-browser
+        --ip=0.0.0.0
+        --allow-root
+        --NotebookApp.token=
+        --notebook-dir=${{ volumes.project.mount }}
+
   tensorboard:
     image: tensorflow/tensorflow:latest
     volumes:

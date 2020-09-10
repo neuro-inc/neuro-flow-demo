@@ -13,6 +13,7 @@ RUN apt-get -qq update \
 # Install pip dependencies:
 RUN pip install -U --no-cache-dir \
         jupyter \ 
+        jupyterlab \ 
         tqdm
 
 
