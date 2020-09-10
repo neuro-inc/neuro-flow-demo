@@ -11,7 +11,7 @@ defaults:
 
 volumes:
   project:
-    remote: storage:${{ flow.id }}
+    remote: storage:${{ flow.project_id }}
     local: .
     mount: /project
     read_only: False
@@ -19,7 +19,7 @@ volumes:
 
 images:
   myimage:
-    ref: image:${{ flow.id }}:v1.0
+    ref: image:${{ flow.project_id }}:v1.0
     dockerfile: ${{ flow.workspace }}/.neuro/Dockerfile
     context: ${{ flow.workspace }}
 
