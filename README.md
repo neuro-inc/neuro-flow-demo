@@ -13,7 +13,7 @@ pip install -U neuromation neuro-flow
 ```bash
 neuro-flow mkvolumes
 neuro-flow upload ALL
-neuro-flow build myimage
+neuro-flow build my-image
 ```
 
 # Run jobs

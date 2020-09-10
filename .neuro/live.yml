@@ -18,7 +18,7 @@ volumes:
 
 
 images:
-  myimage:
+  my-image:
     ref: image:${{ flow.id }}:v1.0
     dockerfile: ${{ flow.workspace }}/.neuro/Dockerfile
     context: ${{ flow.workspace }}
@@ -26,7 +26,7 @@ images:
 
 jobs:
   develop:
-    image: ${{ images.myimage.ref }}
+    image: ${{ images.my-image.ref }}
     volumes:
       - ${{ volumes.project.ref_rw }}
     env:
@@ -36,7 +36,7 @@ jobs:
     cmd: bash
 
   train:
-    image: ${{ images.myimage.ref }}
+    image: ${{ images.my-image.ref }}
     volumes:
       - ${{ volumes.project.ref_rw }}
     detach: True
@@ -46,7 +46,7 @@ jobs:
         python ${{ volumes.project.mount }}/train.py
 
   jupyter:
-    image: ${{ images.myimage.ref }}
+    image: ${{ images.my-image.ref }}
     volumes:
       - ${{ volumes.project.ref_rw }}
     http_port: 8888
