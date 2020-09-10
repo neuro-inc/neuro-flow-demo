@@ -20,7 +20,7 @@ volumes:
 images:
   myimage:
     ref: image:${{ flow.id }}:v1.0
-    dockerfile: ${{ flow.workspace }}/Dockerfile
+    dockerfile: ${{ flow.workspace }}/.neuro/Dockerfile
     context: ${{ flow.workspace }}
 
 

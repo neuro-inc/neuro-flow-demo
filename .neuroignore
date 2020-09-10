@@ -1,0 +1,5 @@
+# Define files or directories that you do NOT want to be uploaded to Neu.ro storage
+# Syntax: like in .gitignore (see https://git-scm.com/docs/gitignore#_pattern_format)
+# Examples:
+#/data/**       # ignore all files inside `./data/`
+#bin/           # ignore all directries named `bin`
